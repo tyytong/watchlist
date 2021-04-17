@@ -91,4 +91,17 @@ def test_url_for():
 def index():
     user = User.query.first()
     movies = Movie.query.all()
-    return render_template('index.html', user=user, movies=movies)
+    return render_template('index.html', movies=movies)
+
+
+# 模板上下文处理函数
+@app.context_processor
+def inject_user():
+    user = User.query.first()
+    return dict(user=user)   # 需要返回字典, 等同于 return {'user': user}
+
+
+@app.errorhandler(404)   # 传入要处理的错误代码
+def page_not_found(e):
+    user = User.query.first()
+    return render_template('404.html'), 404    # 返回模板和状态码
